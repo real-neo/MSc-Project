@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import glob
 import os
+from operator import itemgetter
 from typing import List, Set
 
 
@@ -11,8 +12,12 @@ def convert_bytes(size: int) -> str:
         size /= 1024.0
 
 
+def file_size_in_byte(path: str) -> int:
+    return os.stat(path).st_size
+
+
 def file_size(path: str) -> str:
-    return convert_bytes(os.stat(path).st_size)
+    return convert_bytes(file_size_in_byte(path))
 
 
 def file_list(directory: str) -> List[str]:
@@ -36,20 +41,24 @@ def suffix_list(directory: str) -> Set:
     return suffix
 
 
-def dir_detail_java(directory: str):
+def dir_detail_java(directory: str) -> List:
     _list = glob.glob(os.path.join(directory, '**/*.java'), recursive=True)
     print('Java file numbers:', len(_list))
+    detail = []
     for f in _list:
-        print(f, file_size(f), file_line(f))
+        detail.append([f, file_size(f), file_size_in_byte(f), file_line(f)])
+    return detail
 
 
-def dir_detail_text(directory: str):
+def dir_detail_text(directory: str) -> List:
     _list = file_list(directory)
     print('Text file numbers:', len(_list))
+    detail = []
     for f in _list:
         if ('.git' not in f) and ('.idea' not in f) and ('.DS_Store' not in f) and (not f.endswith('.zip')) and \
                 (not f.endswith('.gif')) and (not f.endswith('.png')) and (not f.endswith('.jar')):
-            print(f, file_size(f), file_line(f))
+            detail.append([f, file_size(f), file_size_in_byte(f), file_line(f)])
+    return detail
 
 
 def list_all_file(directory: str):
@@ -63,5 +72,9 @@ if __name__ == '__main__':
     gson_dir = '/Users/neo/IdeaProjects/gson'
     # print(suffix_list(gson_dir))
     # list_all_file(gson_dir)
-    dir_detail_text(gson_dir)
-    # dir_detail_java(gson_dir)
+    _detail = dir_detail_text(gson_dir)
+    # _detail = dir_detail_java(gson_dir)
+    _detail.sort(key=itemgetter(2), reverse=True)       # sorted by size
+    # _detail.sort(key=itemgetter(3), reverse=True)       # sorted by LOC
+    for _f in _detail:
+        print(_f)
