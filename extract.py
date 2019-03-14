@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import csv
 import glob
 import os
 from operator import itemgetter
@@ -68,6 +69,14 @@ def list_all_file(directory: str):
             print(_f)
 
 
+def export_detail_to_csv(export: List):
+    with open('detail.csv', mode='w') as csv_file:
+        csv_file.write("file, size, size(bytes), LOC\r\n")
+        _w = csv.writer(csv_file)
+        for _e in export:
+            _w.writerow(_e)
+
+
 if __name__ == '__main__':
     gson_dir = '/Users/neo/IdeaProjects/gson'
     # print(suffix_list(gson_dir))
@@ -78,3 +87,4 @@ if __name__ == '__main__':
     # _detail.sort(key=itemgetter(3), reverse=True)       # sorted by LOC
     for d in detail:
         print(d)
+    export_detail_to_csv(detail)
