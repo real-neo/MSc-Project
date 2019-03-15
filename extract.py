@@ -82,9 +82,9 @@ if __name__ == '__main__':
     # print(suffix_list(gson_dir))
     # list_all_file(gson_dir)
     detail = dir_detail_text(gson_dir)
-    # _detail = dir_detail_java(gson_dir)
+    # detail = dir_detail_java(gson_dir)
     detail.sort(key=itemgetter(2), reverse=True)       # sorted by size
-    # _detail.sort(key=itemgetter(3), reverse=True)       # sorted by LOC
+    # detail.sort(key=itemgetter(3), reverse=True)       # sorted by LOC
     for d in detail:
         print(d)
     export_detail_to_csv(detail)
