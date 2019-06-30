@@ -47,7 +47,7 @@ def dir_detail_java(directory: str) -> List:
     print('Java file numbers:', len(_list))
     _detail = []
     for _f in _list:
-        _detail.append([_f, file_size(_f), file_size_in_byte(_f), file_line(_f)])
+        _detail.append([_f.replace(directory, '.'), file_size(_f), file_size_in_byte(_f), file_line(_f)])
     return _detail
 
 
@@ -58,7 +58,7 @@ def dir_detail_text(directory: str) -> List:
     for _f in _list:
         if ('.git' not in _f) and ('.idea' not in _f) and ('.DS_Store' not in _f) and (not _f.endswith('.zip')) and \
                 (not _f.endswith('.gif')) and (not _f.endswith('.png')) and (not _f.endswith('.jar')):
-            _detail.append([_f, file_size(_f), file_size_in_byte(_f), file_line(_f)])
+            _detail.append([_f.replace(directory, '.'), file_size(_f), file_size_in_byte(_f), file_line(_f)])
     return _detail
 
 
@@ -81,9 +81,9 @@ if __name__ == '__main__':
     gson_dir = '/Users/neo/IdeaProjects/gson'
     # print(suffix_list(gson_dir))
     # list_all_file(gson_dir)
-    detail = dir_detail_text(gson_dir)
-    # detail = dir_detail_java(gson_dir)
-    detail.sort(key=itemgetter(2), reverse=True)       # sorted by size
+    # detail = dir_detail_text(gson_dir)
+    detail = dir_detail_java(gson_dir)
+    detail.sort(key=itemgetter(2), reverse=True)  # sorted by size
     # detail.sort(key=itemgetter(3), reverse=True)       # sorted by LOC
     for d in detail:
         print(d)
