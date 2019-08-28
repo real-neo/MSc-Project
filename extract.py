@@ -81,4 +81,4 @@ if __name__ == '__main__':
     # list_all_file(gson_dir)
     # detail = dir_detail_text(gson_dir)
     detail = dir_detail(gson_dir, 'java')
-    export_detail_to_csv(detail, 'detail.csv')
+    export_detail_to_csv(detail, 'data/software-detail.csv')

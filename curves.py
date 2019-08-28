@@ -84,9 +84,9 @@ def draw_loc(file):
 
 if __name__ == '__main__':
     draw_population_curve('data/US-Population.csv')
-    draw_loc_curve('detail.csv')
+    draw_loc_curve('data/software-detail.csv')
 
     draw_population('data/US-Population-Coordinate.csv')
     # 'data/US-Population-Coordinate.csv' 'data/China-Population-Coordinate.csv'
 
-    draw_loc('detail.csv')
+    draw_loc('data/software-detail.csv')

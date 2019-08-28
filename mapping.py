@@ -104,14 +104,14 @@ def powerlaw_population(file):
 
 
 if __name__ == '__main__':
-    powerlaw_result = powerlaw_loc('detail.csv')
+    powerlaw_result = powerlaw_loc('data/software-detail.csv')
     print(powerlaw_result)
 
     powerlaw_result = powerlaw_population('data/US-Population-Coordinate.csv')
     # powerlaw_result = powerlaw_population('data/China-Population-Coordinate.csv')
     print(powerlaw_result)
 
-    df = create_mapping('data/US-Population-Coordinate.csv', 'detail.csv')
+    df = create_mapping('data/US-Population-Coordinate.csv', 'data/software-detail.csv')
     df.to_csv('data/result-us.csv', index=False)
-    # df = create_mapping('data/China-Population-Coordinate.csv', 'detail.csv')
+    # df = create_mapping('data/China-Population-Coordinate.csv', 'data/software-detail.csv')
     # df.to_csv('data/result-cn.csv', index=False)
