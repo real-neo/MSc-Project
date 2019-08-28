@@ -40,9 +40,9 @@ def suffix_list(directory: str) -> Set:
     return _suffix
 
 
-def dir_detail_java(directory: str) -> List:
-    _list = glob.glob(os.path.join(directory, '**/*.java'), recursive=True)
-    print('Java file numbers:', len(_list))
+def dir_detail(directory: str, suffix: str) -> List:
+    _list = glob.glob(os.path.join(directory, '**/*.' + suffix), recursive=True)
+    print(suffix + ' file numbers:', len(_list))
     _detail = []
     for _f in _list:
         _detail.append([_f.replace(directory, '.'), file_size(_f), file_size_in_byte(_f), file_line(_f)])
@@ -67,8 +67,8 @@ def list_all_file(directory: str):
             print(_f)
 
 
-def export_detail_to_csv(export: List):
-    with open('detail.csv', mode='w') as csv_file:
+def export_detail_to_csv(export: List, filename: str):
+    with open(filename, mode='w') as csv_file:
         csv_file.write("File,Size,Size(bytes),LOC\r\n")
         _w = csv.writer(csv_file)
         for _e in export:
@@ -80,5 +80,5 @@ if __name__ == '__main__':
     # print(suffix_list(gson_dir))
     # list_all_file(gson_dir)
     # detail = dir_detail_text(gson_dir)
-    detail = dir_detail_java(gson_dir)
-    export_detail_to_csv(detail)
+    detail = dir_detail(gson_dir, 'java')
+    export_detail_to_csv(detail, 'detail.csv')

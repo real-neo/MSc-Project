@@ -1,9 +1,16 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 import powerlaw
 
 
-def create_mapping(population, code) -> pd.DataFrame:
+def create_mapping(population_file, code_file) -> pd.DataFrame:
+    population = pd.read_csv(population_file)
+    population.sort_values(by='Population', ascending=False, inplace=True)
+    population = population.reset_index()
+
+    code = pd.read_csv(code_file)
+    code.sort_values(by='LOC', ascending=False, inplace=True)
+    code = code.reset_index()
+
     size_population = len(population.index)
     size_code = len(code.index)
 
@@ -22,10 +29,17 @@ def create_mapping(population, code) -> pd.DataFrame:
 def power_law(dataset):
     fit = powerlaw.Fit(dataset, discrete=True)
 
+    result = ''
+
     print('xmin =', fit.xmin)
     print('alpha =', fit.power_law.alpha)
     print('sigma =', fit.power_law.sigma)
     print('D =', fit.power_law.D)
+
+    result = result + 'xmin = ' + str(fit.xmin) + '\n\n'
+    result = result + 'alpha = ' + str(fit.power_law.alpha) + '\n\n'
+    result = result + 'sigma = ' + str(fit.power_law.sigma) + '\n\n'
+    result = result + 'D = ' + str(fit.power_law.D) + '\n\n'
 
     R1, p1 = fit.distribution_compare('power_law', 'exponential')
     R2, p2 = fit.distribution_compare('power_law', 'lognormal')
@@ -40,6 +54,15 @@ def power_law(dataset):
     print('power_law vs. stretched_exponential', R3, p3)
     print('power_law vs. truncated_power_law', R4, p4)
     print('exponential vs. truncated_power_law', R5, p5)
+
+    result = result + 'power_law vs. exponential ' + str(R1) + ' ' + str(p1) + '\n\n'
+    result = result + 'power_law vs. lognormal ' + str(R2) + ' ' + str(p2) + '\n\n'
+    result = result + 'lognormal vs. exponential' + str(R21) + ' ' + str(p21) + '\n\n'
+    result = result + 'power_law vs. stretched_exponential ' + str(R3) + ' ' + str(p3) + '\n\n'
+    result = result + 'power_law vs. truncated_power_law ' + str(R4) + ' ' + str(p4) + '\n\n'
+    result = result + 'exponential vs. truncated_power_law ' + str(R5) + ' ' + str(p5) + '\n\n'
+
+    return result
 
     # Code LOC
     # xmin = 197.0
@@ -66,56 +89,29 @@ def power_law(dataset):
     # exponential vs. truncated_power_law -241.2612171969255 0.00025414171564295564
 
 
-def draw_pdf(dataset, x_label):
-    fig, ax = plt.subplots()
-
-    figPDF = powerlaw.plot_pdf(dataset, ax, color='b')
-    powerlaw.plot_pdf(dataset, linear_bins=True, color='r', ax=figPDF)
-
-    figPDF.set_title(x_label + ' PDF')
-    figPDF.set_xlabel(x_label)
-    figPDF.set_ylabel("p(X)")
-    figname = 'FigPDF'
-    fig.show()
+def powerlaw_loc(file):
+    code = pd.read_csv(file)
+    code.sort_values(by='LOC', ascending=False, inplace=True)
+    code = code.reset_index()
+    return power_law(code.LOC)
 
 
-def draw_ccdf(dataset, x_label):
-    fit = powerlaw.Fit(dataset, discrete=True)
-
-    fig, ax = plt.subplots()
-
-    figCCDF = fit.plot_pdf(ax, color='b', linewidth=2)
-    fit.power_law.plot_pdf(color='b', linestyle='--', ax=figCCDF)
-    fit.plot_ccdf(color='r', linewidth=2, ax=figCCDF)
-    fit.power_law.plot_ccdf(color='r', linestyle='--', ax=figCCDF)
-
-    figCCDF.set_title(x_label + ' CCDF')
-    figCCDF.set_xlabel(x_label)
-    figCCDF.set_ylabel(u"p(X),  p(X≥x)")
-
-    figname = 'FigCCDF'
-    fig.show()
+def powerlaw_population(file):
+    population = pd.read_csv(file)
+    population.sort_values(by='Population', ascending=False, inplace=True)
+    population = population.reset_index()
+    return power_law(population.Population)
 
 
 if __name__ == '__main__':
-    population = pd.read_csv('data/US-Population-Coordinate.csv')
-    # population = pd.read_csv('data/China-Population-Coordinate.csv')
-    population.sort_values(by='Population', ascending=False, inplace=True)
-    population = population.reset_index()
+    powerlaw_result = powerlaw_loc('detail.csv')
+    print(powerlaw_result)
 
-    code = pd.read_csv('detail.csv')
-    code.sort_values(by='LOC', ascending=False, inplace=True)
-    code = code.reset_index()
+    powerlaw_result = powerlaw_population('data/US-Population-Coordinate.csv')
+    # powerlaw_result = powerlaw_population('data/China-Population-Coordinate.csv')
+    print(powerlaw_result)
 
-    df = create_mapping(population, code)
+    df = create_mapping('data/US-Population-Coordinate.csv', 'detail.csv')
     df.to_csv('data/result-us.csv', index=False)
+    # df = create_mapping('data/China-Population-Coordinate.csv', 'detail.csv')
     # df.to_csv('data/result-cn.csv', index=False)
-
-    draw_pdf(population.Population, 'Population')
-    draw_pdf(code.LOC, 'LOC')
-
-    draw_ccdf(population.Population, 'Population')
-    draw_ccdf(code.LOC, 'LOC')
-
-    power_law(population.Population)
-    power_law(code.LOC)

@@ -5,13 +5,15 @@ from geopy.exc import GeocoderUnavailable
 from geopy.geocoders import GoogleV3
 
 
-def add_coordinate(dataset: pd.DataFrame) -> pd.DataFrame:
+def add_coordinate(file) -> pd.DataFrame:
     API_KEY = 'AIzaSyBIzyBqDeJ7noegKeFdSKNSncOU56onBo4'
 
     gmaps.configure(api_key=API_KEY)
     geo_locator = GoogleV3(api_key=API_KEY)
 
     new_data = pd.DataFrame(columns=['City', 'Population', 'Latitude', 'Longitude'])
+
+    dataset = pd.read_csv(file)
 
     for index, data in dataset.iterrows():
         while True:
@@ -31,8 +33,5 @@ def add_coordinate(dataset: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    population = pd.read_csv('data/US-Population.csv')
-    # population = pd.read_csv('data/China-Population.csv')
-
-    add_coordinate(population).to_csv('data/US-Population-Coordinate.csv', index=False)
-    # add_coordinate(population).to_csv('data/China-Population-Coordinate.csv', index=False)
+    add_coordinate('data/US-Population.csv').to_csv('data/US-Population-Coordinate.csv', index=False)
+    # add_coordinate('data/China-Population.csv').to_csv('data/China-Population-Coordinate.csv', index=False)
