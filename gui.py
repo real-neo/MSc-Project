@@ -1,4 +1,5 @@
 from tkinter import *
+import subprocess
 
 import matplotlib
 import gui_software
@@ -18,10 +19,14 @@ def center_window(frame, w=400, h=400):
     frame.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 
+def jupyter_lab():
+    subprocess.run(['jupyter', 'lab'])
+
+
 if __name__ == '__main__':
     root = Tk()
     root.title('CodeCountry')
-    center_window(root, 300, 100)
+    center_window(root, 300, 150)
 
     button_software = Button(root, text='Analyse software system', command=lambda: gui_software.create_software(root))
     button_software.place(x=60, y=0)
@@ -32,5 +37,8 @@ if __name__ == '__main__':
 
     button_mapping = Button(root, text='Create mappings', command=lambda: gui_mappings.create_mappings(root))
     button_mapping.place(x=60, y=60)
+
+    button_juypter = Button(root, text='JupyterLab to show map', command=jupyter_lab)
+    button_juypter.place(x=60, y=90)
 
     root.mainloop()
