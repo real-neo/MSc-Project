@@ -1,4 +1,3 @@
-import gmaps
 import pandas as pd
 from geopy.exc import GeocoderTimedOut
 from geopy.exc import GeocoderUnavailable
@@ -6,10 +5,7 @@ from geopy.geocoders import GoogleV3
 
 
 def add_coordinate(file) -> pd.DataFrame:
-    API_KEY = 'AIzaSyBIzyBqDeJ7noegKeFdSKNSncOU56onBo4'
-
-    gmaps.configure(api_key=API_KEY)
-    geo_locator = GoogleV3(api_key=API_KEY)
+    geo_locator = GoogleV3(api_key='AIzaSyBIzyBqDeJ7noegKeFdSKNSncOU56onBo4')
 
     new_data = pd.DataFrame(columns=['City', 'Population', 'Latitude', 'Longitude'])
 
