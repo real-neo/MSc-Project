@@ -38,7 +38,7 @@ if __name__ == '__main__':
     button_mapping = Button(root, text='Create mappings', command=lambda: gui_mappings.create_mappings(root))
     button_mapping.place(x=60, y=60)
 
-    button_juypter = Button(root, text='JupyterLab to show map', command=jupyter_lab)
+    button_juypter = Button(root, text='JupyterLab for showing map', command=jupyter_lab)
     button_juypter.place(x=60, y=90)
 
     root.mainloop()
